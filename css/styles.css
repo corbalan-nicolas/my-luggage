@@ -1,0 +1,47 @@
+:root {
+  --max-width: 1280px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 0;
+  top: -10rem;
+
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  
+  background-color: rgb(179, 94, 94);
+  text-align: center;
+  color: white;
+  text-decoration: underline white;
+
+  &:focus {
+    top: 0;
+  }
+
+}
+
+.container {
+  max-width: 1280px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.shadow-lg-t {
+  box-shadow: 0 -10px -15px -3px rgb(0 0 0 / 0.1), 0 -4px -6px -4px rgb(0 0 0 / 0.1);
+}
+
+main:target {
+  animation: highlightContainer 1.5s ease-in both;
+}
+
+@keyframes highlightContainer {
+  0% {
+    background-color: wheat;
+  }
+
+  100% {
+    background-color: white;
+  }
+}
