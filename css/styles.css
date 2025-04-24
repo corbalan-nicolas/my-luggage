@@ -107,8 +107,7 @@ footer {
   --item-width: 10px;
   position: relative;
   
-  padding: .5rem 1rem;
-  padding-left: 2.5rem;
+  padding: 0 1rem 0 2.5rem;
   margin: 3px 0;
   
   display: grid;
@@ -132,17 +131,16 @@ footer {
     background-color: rgb(34, 34, 34);
     opacity: .5;
   }
+  /* background-color: pink; */
 }
 
 .list__item-input {
-  border-bottom: 1px solid rgba(0, 0, 0, 0);
-  transition: all 200ms ease-in-out;
-  &:focus {
-    border-bottom-color: rgba(0, 0, 0, .2);
-  }
+  padding: .5rem;
+  display: block;
 }
 
 .list__item-button {
+  /* background-color: aqua; */
   aspect-ratio: 1 / 1;
   display: grid;
   place-content: center;
