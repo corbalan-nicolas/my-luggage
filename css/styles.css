@@ -131,7 +131,6 @@ footer {
     background-color: rgb(34, 34, 34);
     opacity: .5;
   }
-  /* background-color: pink; */
 }
 
 .list__item-input {
@@ -140,7 +139,6 @@ footer {
 }
 
 .list__item-button {
-  /* background-color: aqua; */
   aspect-ratio: 1 / 1;
   display: grid;
   place-content: center;
@@ -155,6 +153,18 @@ footer {
     color: rgb(85, 85, 85);
     /* text-decoration: 1px line-through rgba(0 0 0 /.5); */
   }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
 .view-options {

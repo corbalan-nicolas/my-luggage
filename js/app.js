@@ -30,7 +30,8 @@ app.component('view-home', {
     <form action="#" method="post" @submit.prevent="addLuggage()">
       <div class="input-group">
         <input class="input-group__input" type="text" v-model="formData.title" placeholder="Añadir nuevo equipaje">
-        <button class="input-group__button" aria-labelledby="Añadir">
+        <button class="input-group__button">
+          <span class="sr-only">Añadir</span>
           <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
         </button>
       </div>
@@ -39,6 +40,7 @@ app.component('view-home', {
 
     <div class="view-options">
       <label class="view-options__option">
+        <span class="sr-only">Activar / Desactivar modo edición</span>
         <input class="view-options__input" type="checkbox" v-model="editModeIsOn">
         <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
       </label>
@@ -143,15 +145,17 @@ app.component('view-luggage', {
   template: `
     <div class="view-header">
       <h1>{{ucFirst(this.getTitle())}}</h1>
-      <button aria-labelledby="Cerrar equipaje" @click="closeView()">
-      <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
+      <button @click="closeView()">
+        <span class="sr-only">Cerrar (Volver al Inicio)</span>
+        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
       </button>
     </div>
 
     <form action="#" method="post" @submit.prevent="addItem()">
       <div class="input-group">
         <input class="input-group__input" type="text" v-model="formData.name" placeholder="Añadir nuevo item">
-        <button class="input-group__button" aria-labelledby="Añadir">
+        <button class="input-group__button">
+          <span class="sr-only">Añadir</span>
           <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
         </button>
       </div>
@@ -159,10 +163,12 @@ app.component('view-luggage', {
     </form>
 
     <div class="view-options">
-      <button class="view-options__option" aria-labelledby="Resetear items" @click="resetItems()">
+      <button class="view-options__option" @click="resetItems()">
+        <span class="sr-only">Resetear items</span>
         <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
       </button>  
       <label class="view-options__option">
+        <span class="sr-only">Activar / Desactivar modo edición</span>
         <input class="view-options__input" type="checkbox" v-model="editModeIsOn">
         <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
       </label>
@@ -170,14 +176,12 @@ app.component('view-luggage', {
 
     <ul class="list" v-if="items.length">
       <template v-for="(item, index) of items">
-        <li>
-          <label :class="item.checked ? 'list__item active' : 'list__item'">
+        <li @click="checkItem(index)" :class="item.checked ? 'list__item active' : 'list__item'">
             <input class="hidden" type="checkbox" v-model="item.checked" @change="updateLocalStorage()">
             <input :class="editModeIsOn ? 'list__item-input' : 'list__item-input pointer-events-none'" type="text" v-model="item.name" @blur="updateLocalStorage()" :disabled="!editModeIsOn">
             <button class="list__item-button" v-if="editModeIsOn" @click="removeItem(index)">
               <svg width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
             </button>
-          </label>
         </li>
       </template>
     </ul>
@@ -239,6 +243,12 @@ app.component('view-luggage', {
     },
     removeItem: function(index) {
       this.items.splice(index, 1)
+      this.updateLocalStorage()
+    },
+    checkItem: function(itemIndex) {
+      if(this.editModeIsOn) return
+
+      this.items[itemIndex].checked = !this.items[itemIndex].checked
       this.updateLocalStorage()
     },
     resetItems: function() {
