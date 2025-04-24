@@ -3,14 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Parcial I | Vue.js | Corbalan Nicolas</title>
+  <title>Parcial I | PWA | Corbalan Nicolas</title>
 
-  <!-- Estilos -->
+  <!-- Icon -->
+  <link rel="icon" type="image/png" sizes="32x32" href="img/icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="img/icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="img/icons/favicon-16x16.png">
+
+  <!-- Styles -->
   <link rel="stylesheet" href="css/styles.css">
 
   <!-- Scripts -->
   <script defer src="js/vue.js"></script>
   <script defer src="js/app.js"></script>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <script defer src="service-worker.js"></script>
+
 </head>
 <body>
   <div id="app" v-cloak>
@@ -27,7 +37,6 @@
       <section v-else>
         <h1>Error 404</h1>
         <p>Página no encontrada</p>
-        <small>Si el error persiste tiene todo el derecho a aplicarme la guadaña 😔</small>
         <button @click="setView('home')">Volver al inicio</button>
         <!-- Hasta ahora no me ha pasado de acceder a esta sección, asi que me pondría muy triste si te pasara a vos profe... -->
       </section>
@@ -42,8 +51,3 @@
   </div>
 </body>
 </html>
-
-<!-- TO DO
-[]
-
--->
