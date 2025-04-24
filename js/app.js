@@ -23,22 +23,7 @@ app.component('view-home', {
         title: '',
         errorMessage: ''
       },
-      luggages: this.getLuggages() ?? [
-        {
-          id: 'm9uexp220.q6plnfhjzr',
-          title: 'Equipaje de muestra',
-          items: [
-            {
-              name: 'Item listo en tu equpaje',
-              checked: true
-            },
-            {
-              name: 'Item sin equipar',
-              checked: false
-            }
-          ]
-        }
-      ]
+      luggages: this.getLuggages()
     }
   },
   template: `
@@ -102,7 +87,30 @@ app.component('view-home', {
       })
     },
     getLuggages: function() {
-      return JSON.parse(localStorage.getItem('luggages'))
+      let luggages = JSON.parse(localStorage.getItem('luggages'))
+      if(luggages) {
+        return luggages
+      }else {
+        luggages = [
+          {
+            id: 'm9uexp220.q6plnfhjzr',
+            title: 'Equipaje de muestra',
+            items: [
+              {
+                name: 'Item listo en tu equpaje',
+                checked: true
+              },
+              {
+                name: 'Item sin equipar',
+                checked: false
+              }
+            ]
+          }
+        ]
+
+        localStorage.setItem('luggages', JSON.stringify(luggages))
+      }
+      return luggages
     },
     updateLuggages: function() {
       localStorage.setItem('luggages', JSON.stringify(this.luggages))
