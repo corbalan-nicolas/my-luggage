@@ -228,6 +228,7 @@ footer {
   img {
     width: 80%;
     display: block;
+    aspect-ratio: 363 / 366;
     margin: 1rem auto 0 auto;
   }
 
