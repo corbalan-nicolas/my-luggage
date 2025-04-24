@@ -1,72 +1,48 @@
-<!--
-Consultas que van surgiendo
-- Podemos usar nombres para las propiedades nativas de HTML? (ej: id, name, type, etc)
--->
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Descube el Horóscopo de tu Mascota</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Parcial I | Vue.js | Corbalan Nicolas</title>
 
-  <script defer src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- Estilos -->
   <link rel="stylesheet" href="css/styles.css">
 
+  <!-- Scripts -->
   <script defer src="js/vue.js"></script>
   <script defer src="js/app.js"></script>
 </head>
-<body class="bg-red-150">
-  <a class="skip-link" href="#mainContent">Saltar al contenido principal</a>
+<body>
+  <div id="app" v-cloak>
+    <main>
+      <section v-if="view == 'home'">
+        <h1>Mis equipajes</h1>
+        <view-home></view-home>
+      </section>
+      
+      <section class="view-luggage" v-else-if="view == 'luggage'">
+        <view-luggage :luggage-id="selectedLuggage"></view-luggage>
+      </section>
 
-  <div id="app" class="flex flex-col border min-h-dvh" v-cloak>
-    <div class="shadow-md z-1 bg-purple-950 text-yellow-100">
-      <header class="container py-3 px-6 flex justify-between">
-        <h1>Descubre el signo de tu macota</h1>
-        <nav>
-          <ul class="flex gap-3">
-            <li><a href="#" @click="setSection('home')">Inicio</a></li>
-            <li><a href="#" @click="setSection('form')">Formulario</a></li>
-          </ul>
-        </nav>
-      </header>
-    </div>
-
-    <main id="mainContent" class="container py-3 px-6 flex-grow-1 bg-gray-50">
-      <section class="grid grid-cols-2 gap-6" v-if="section == 'home'">
-        <div>
-          <h2 class="text-6xl">¿Sabés cuál es el signo de tu mascota?</h2>
-          <p>No es ningún secreto que muchas veces estos bichitos tan curiosos a los que denominamos como mascotas, tratamos como hijos, y mimamos como dioses pueden llegar a tener comportamientos bastante peculiares ¡y no es para menos! ya que estos comportamientos están ligados a su horóscopo, asi que si tenés aunque sea un poquitito curiosidad por saber cuál es el signo de tu mascota dejame decirte que estás en el lugar correcto 😼</p>
-          <button @click="setSection('form')">¡Necesito Saberlo! D:</button>
-        </div>
-        <div>
-          <img src="img/carousel/cat1.jpg" alt="Foto de un gatito muy lindo y tierno">
-        </div>
-      </section>
-  
-      <section v-else-if="section == 'form'">
-        <h2>Formulario</h2>
-  
-        <form-horoscope>
-      </section>
-  
-      <section v-else-if="section == 'result'">
-        <h2>Resultado</h2>
-      </section>
-  
       <section v-else>
-        <h2>Error 404, página no encontrada</h2>
-        <p>La sección "{{section}}" no se encuentra disponible, si el error sigue persistiendo tiene todo mi permiso para desahogándose conmigo utilizando sus insultos más fuertes e hirientes 😩</p>
-        <small>PD: ¿Cómo llegaste acá? 🤔</small>
-        <button @click="setSection('home')">Ir al Inicio</button>
+        <h1>Error 404</h1>
+        <p>Página no encontrada</p>
+        <small>Si el error persiste tiene todo el derecho a aplicarme la guadaña 😔</small>
+        <button @click="setView('home')">Volver al inicio</button>
+        <!-- Hasta ahora no me ha pasado de acceder a esta sección, asi que me pondría muy triste si te pasara a vos profe... -->
       </section>
     </main>
 
-    <div class="shadow-lg-t z-1 bg-purple-950 text-yellow-100">
-      <footer class="container py-3 px-6 text-center">
-        <p>&copy; Corbalan Nicolas Leonel, 2025</p>
-      </footer>
-    </div>
+    <footer>
+      <button @click="setView('home')" aria-labelledby="Ir al inicio">
+        <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+      </button>
+    </footer>
   </div>
 </body>
 </html>
+
+<!-- TO DO
+[]
+
+-->
