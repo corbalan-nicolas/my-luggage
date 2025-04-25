@@ -37,7 +37,7 @@ body {
   background-color: #eff3f6;
 }
 
-#app {
+#app, .app {
   display: grid;
   grid-template-rows: 1fr auto;
   margin: 0 auto;
