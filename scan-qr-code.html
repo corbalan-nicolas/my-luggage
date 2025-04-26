@@ -8,13 +8,41 @@
   <link rel="stylesheet" href="css/styles.css">
 
   <script src="js/qr-code-min.js"></script>
+
+  <style>
+    .qr-area {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      border-radius: 2rem;
+
+      &::after {
+        content: "";
+        width: 60%;
+        aspect-ratio: 1/1;
+        position: absolute;
+        margin: auto;
+        border-radius: 2rem;
+        inset: 0;
+        border:6px solid white;
+      }
+    }
+    canvas {
+      position: absolute;
+      top: 0;
+      left: -55%;
+    }
+  </style>
 </head>
 <body>
   <div class="app">
 
     <main>
       <h1>Escanear código QR</h1>
-      <canvas hidden="" id="qr-canvas" class="img-fluid"></canvas>
+      <div class="qr-area">
+        <canvas hidden="" id="qr-canvas"></canvas>
+      </div>
       <p>Escanea un código QR para importar el nuevo equipaje</p>
     </main>
 

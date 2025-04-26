@@ -1,4 +1,4 @@
-console.log("hola")
+console.log("holas")
 //crea elemento
 const video = document.createElement("video");
 
@@ -49,12 +49,14 @@ const cerrarCamara = () => {
   canvasElement.hidden = true;
 };
 
-
+let result;
 //callback cuando termina de leer el codigo QR
 qrcode.callback = (respuesta) => {
   if (respuesta) {
-    console.log(respuesta);
-    document.innerHTML += respuesta
+    copado(respuesta)
+    // NO SE PUEDE SACAR DE ACÁ, 
+    // PERO TÉCNICAMENTE SE PODRÍA 
+    // HACER UN JSON.PARSE
 
   }
 };
@@ -65,5 +67,7 @@ window.addEventListener('load', (e) => {
 
 
 
-
+function copado(value) {
+  console.log(value)
+}
 
