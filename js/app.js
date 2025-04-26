@@ -1,15 +1,13 @@
-const MAX_LENGTH = 50 // Variable para definir el máximo de caracteres por item & equipajes (fácilmente salteable editándolos posteriormente)
+const MAX_LENGTH = 50 // Variable para definir el máximo de caracteres por item & equipajes (fácilmente salteable editándolos posteriormente :/)
 const app = Vue.createApp({
   data() {
     return {
-      view: localStorage.getItem('view') ?? 'home', // ej: home || equipaje
+      view: localStorage.getItem('view') ?? 'home', // 'home' | 'luggage'
       selectedLuggage: localStorage.getItem('selectedLuggage') ?? ''
-      //...
     }
   },
   methods: {
     setView: function(view) {
-      //...
       this.view = view
       localStorage.setItem('view', view)
     }
@@ -18,6 +16,7 @@ const app = Vue.createApp({
 
 app.component('view-home', {
   data() {
+    // Obtengo todos los luggages del localStorage, y si no existe ninguno creo uno de ejemplo, y lo guardo en el localStorage
     let luggages = JSON.parse(localStorage.getItem('luggages'))
     if(!luggages) {
       luggages = [
@@ -276,12 +275,18 @@ app.component('view-luggage', {
       location.reload()
     },
     ucFirst: function(value) {
+      // Salvaguardas para que no rompa todo si llega un str vacío o cosas raras
+      if(typeof value !== 'string' || (typeof value === 'string' && value.length <= 0)) return
+      
       let result = value.split('')
       result[0] = result[0].toUpperCase()
-
+      
       return result.join('')
     },
     cutStr: function(value, maxLength) {
+      // Salvaguardas para que no rompa todo si llega un str vacío o cosas raras
+      if(typeof value !== 'string' || (typeof value === 'string' && value.length <= 0)) return
+
       if(value.length <= maxLength) return value
       return value.split('').slice(0, maxLength).join('') + '...'
     }
