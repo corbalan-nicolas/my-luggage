@@ -64,11 +64,27 @@ h1 {
 
 footer {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  place-content: center;
+  gap: 1rem;
 
   padding: .75rem 1.25rem;
   background-color: #f3f5f7;
+
+  button, a {
+    display: grid;
+    place-content: center;
+    
+    width: 42px;
+    height: 42px;
+
+    cursor: pointer;
+    background-color: rgba(255, 0, 0, 0.363);
+  }
+}
+
+.qr-code {
+  width: 100%;
+  aspect-ratio: 1 / 1;
 }
 
 .input-group {

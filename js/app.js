@@ -163,6 +163,8 @@ app.component('view-luggage', {
     })
 
     return {
+      isSharing: false,
+      qrCodeData: '',
       editModeIsOn: false,
       formData: {
         name: '',
@@ -197,6 +199,11 @@ app.component('view-luggage', {
     </form>
 
     <div class="view-options">
+      <label class="view-options__option">
+        <span class="sr-only">Compartir equipaje (QR)</span>
+        <input class="view-options__input" type="checkbox" @change="generateQrCode()" v-model="isSharing">
+        <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M8.7 10.7l6.6 -3.4" /><path d="M8.7 13.3l6.6 3.4" /></svg>
+      </label>
       <button class="view-options__option" @click="resetItems()">
         <span class="sr-only">Resetear items</span>
         <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
@@ -208,7 +215,11 @@ app.component('view-luggage', {
       </label>
     </div>
 
-    <ul class="list" v-if="items.length">
+    <div v-if="isSharing">
+      <img class="qr-code" :src="'https://api.qrserver.com/v1/create-qr-code/?charse-source=UTF-8&data=' + qrCodeData + '&amp;size=500x500'" alt="" title="" />
+    </div>
+
+    <ul class="list" v-else-if="items.length">
       <template v-for="(item, index) of items">
         <li @click="checkItem(index)" :class="item.checked ? 'list__item active' : 'list__item'">
             <input class="hidden" type="checkbox" v-model="item.checked" @change="updateLocalStorage()">
@@ -275,6 +286,15 @@ app.component('view-luggage', {
 
       location.reload()
     },
+    generateQrCode: function() {
+      let data = {
+        title: this.title,
+        items: this.items.map(item => item.name, [])
+      }
+      data = JSON.stringify(data)
+      
+      this.qrCodeData = data
+    },
     ucFirst: function(value) {
       let result = value.split('')
       result[0] = result[0].toUpperCase()
@@ -284,6 +304,56 @@ app.component('view-luggage', {
     cutStr: function(value, maxLength) {
       if(value.length <= maxLength) return value
       return value.split('').slice(0, maxLength).join('') + '...'
+    }
+  }
+})
+
+app.component('qr-scanner', {
+  data() {
+    return {
+      scanner: '',
+      scanData: {}
+    }
+  },
+  template: 
+  `
+    <p>(Esto requiere permisos)</p>
+    <div id="reader" class="qr-code" ></div>
+
+    {{initScanner()}}
+  `,
+  methods: {
+    initScanner: function() {
+      document.addEventListener('DOMContentLoaded', () => {
+        this.scanner = new Html5QrcodeScanner('reader', {
+          qrbox: {
+            width: 500,
+            height: 500
+          },
+          fps: 20
+        })
+  
+        this.scanner.render(this.success, this.error)
+      })
+    },
+    success: function(result) {
+      result = JSON.parse(result)
+
+      const newLuggage = {
+        id: Date.now().toString(36) + Math.random().toString(36),
+        title: result.title,
+        items: result.items.map(item => { return {"name": item, "checked": false} }, [])
+      }
+
+      const allLuggages = JSON.parse(localStorage.getItem('luggages'))
+      allLuggages.push(newLuggage)
+      localStorage.setItem('luggages', JSON.stringify(allLuggages))
+
+      localStorage.setItem('view', 'home')
+      location.reload()
+    },
+    error: function(error) {
+      // console.error(error)
     }
   }
 })
