@@ -1,14 +1,13 @@
+const MAX_LENGTH = 50 // Variable para definir el máximo de caracteres por item & equipajes (fácilmente salteable editándolos posteriormente :/)
 const app = Vue.createApp({
   data() {
     return {
-      view: localStorage.getItem('view') ?? 'home', // ej: home || equipaje
+      view: localStorage.getItem('view') ?? 'home', // 'home' | 'luggage'
       selectedLuggage: localStorage.getItem('selectedLuggage') ?? ''
-      //...
     }
   },
   methods: {
     setView: function(view) {
-      //...
       this.view = view
       localStorage.setItem('view', view)
     }
@@ -17,17 +16,64 @@ const app = Vue.createApp({
 
 app.component('view-home', {
   data() {
+    // Obtengo todos los luggages del localStorage, y si no existe ninguno creo uno de ejemplo, y lo guardo en el localStorage
+    let luggages = JSON.parse(localStorage.getItem('luggages'))
+    if(!luggages) {
+      luggages = [
+        {
+          id: 'm9uexp220.q6plnfhjzr',
+          title: 'Equipaje de ejemplo',
+          items: [
+            {
+              name: '✨ Esto es una lista básica (default)',
+              checked: true
+            },
+            {
+              name: '➕ Te permite añadir items',
+              checked: true
+            },
+            {
+              name: '✅ Marcarlos como "listos" (click)',
+              checked: true
+            },
+            {
+              name: '✍ Editarlos',
+              checked: false
+            },
+            {
+              name: '🚮 Eliminarlos permanentemente',
+              checked: false
+            },
+            {
+              name: '🔃 Y resetearlos todos a 0 ("sin equipar")',
+              checked: true
+            },
+            {
+              name: '👨‍💻 ¡Pruébalo por ti mismo!',
+              checked: false
+            },
+            {
+              name: 'Espero que te sirva 💖',
+              checked: true
+            }
+          ]
+        }
+      ]
+
+      localStorage.setItem('luggages', JSON.stringify(luggages))
+    }
+
     return {
       editModeIsOn: false,
       formData: {
         title: '',
         errorMessage: ''
       },
-      luggages: this.getLuggages()
+      luggages
     }
   },
   template: `
-    <form action="#" method="post" @submit.prevent="addLuggage()">
+    <form action="#" method="post" @submit.prevent="createLuggage()">
       <div class="input-group">
         <input class="input-group__input" type="text" v-model="formData.title" placeholder="Añadir nuevo equipaje">
         <button class="input-group__button">
@@ -47,9 +93,9 @@ app.component('view-home', {
     </div>
 
     <ul class="list" v-if="luggages.length">
-      <li class="list__item" v-for="item of luggages" @click="viewLuggage(item.id)">
-        <input :class="editModeIsOn ? 'list__item-input': 'list__item-input pointer-events-none'" type="text" v-model="item.title" @blur="updateLuggages()" :disabled="!editModeIsOn">
-        <button class="list__item-button" v-if="editModeIsOn" @click="removeLuggage(item.id)">
+      <li class="list__item" v-for="item of luggages" @click="readLuggage(item.id)">
+        <input :class="editModeIsOn ? 'list__item-input': 'list__item-input pointer-events-none'" type="text" v-model="item.title" @blur="updateLocalStorage()" :disabled="!editModeIsOn">
+        <button class="list__item-button" v-if="editModeIsOn" @click="deleteLuggage(item.id)">
           <svg width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
         </button>
       </li>
@@ -62,11 +108,13 @@ app.component('view-home', {
     </div>
   `,
   methods: {
-    addLuggage: function() {
+    createLuggage: function() {
       this.formData.errorMessage = ''
 
       if(this.formData.title.trim() == '') {
-        this.formData.errorMessage = 'Complete el campo antes de añadir el nuevo equipaje'
+        this.formData.errorMessage = 'No deje el campo vacío'
+      }else if(this.formData.title.length > MAX_LENGTH) {
+        this.formData.errorMessage = `Solo se admiten ${MAX_LENGTH} caracteres como máximo`
       }else {
         // Everything's good. Add the new luggage
         this.luggages.push({
@@ -76,82 +124,67 @@ app.component('view-home', {
         })
 
         this.formData.title = ''
-        this.updateLuggages()
+        this.updateLocalStorage()
       }
     },
-    removeLuggage: function(id) {
+    readLuggage: function(id) {
+      if(this.editModeIsOn) return
+
+      localStorage.setItem('view', 'luggage')
+      localStorage.setItem('selectedLuggage', id)
+
+      location.reload()
+    },
+    updateLocalStorage: function() {
+      localStorage.setItem('luggages', JSON.stringify(this.luggages))
+    },
+    deleteLuggage: function(id) {
       this.luggages.forEach((item, index) => {
         if(item.id == id) {
           this.luggages.splice(index, 1)
-          this.updateLuggages()
+          this.updateLocalStorage()
           return
         }
       })
-    },
-    getLuggages: function() {
-      let luggages = JSON.parse(localStorage.getItem('luggages'))
-      if(luggages) {
-        return luggages
-      }else {
-        luggages = [
-          {
-            id: 'm9uexp220.q6plnfhjzr',
-            title: 'Equipaje de muestra',
-            items: [
-              {
-                name: 'Item listo en tu equpaje',
-                checked: true
-              },
-              {
-                name: 'Item sin equipar',
-                checked: false
-              }
-            ]
-          }
-        ]
-
-        localStorage.setItem('luggages', JSON.stringify(luggages))
-      }
-      return luggages
-    },
-    updateLuggages: function() {
-      localStorage.setItem('luggages', JSON.stringify(this.luggages))
-    },
-    viewLuggage: function(luggageId) {
-      if(this.editModeIsOn) {
-        return
-      }
-
-      localStorage.setItem('view', 'luggage')
-      localStorage.setItem('selectedLuggage', luggageId)
-
-      location.reload()
     }
   }
 })
 
 app.component('view-luggage', {
   data() {
+    let index = 0
+    const allLuggages = JSON.parse(localStorage.getItem('luggages'))
+    const luggageData = allLuggages.find((curr, i) => {
+      if(curr.id == this.luggageId) {
+        index = i
+        return true
+      }
+    })
+
     return {
       editModeIsOn: false,
       formData: {
         name: '',
         errorMessage: ''
       },
-      items: this.getItems() ?? []
+      index,
+      id: luggageData.id,
+      title: luggageData.title,
+      items: luggageData.items
     }
   },
   props: ['luggageId'],
   template: `
     <div class="view-header">
-      <h1>{{ucFirst(this.getTitle())}}</h1>
-      <button @click="closeView()">
+      <h1>{{cutStr(ucFirst(title), 22)}}</h1>
+
+      <button @click="goBack()">
         <span class="sr-only">Cerrar (Volver al Inicio)</span>
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-x"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M18 6l-12 12" /><path d="M6 6l12 12" /></svg>
       </button>
     </div>
 
-    <form action="#" method="post" @submit.prevent="addItem()">
+    <form action="#" method="post" @submit.prevent="createItem()">
       <div class="input-group">
         <input class="input-group__input" type="text" v-model="formData.name" placeholder="Añadir nuevo item">
         <button class="input-group__button">
@@ -179,7 +212,7 @@ app.component('view-luggage', {
         <li @click="checkItem(index)" :class="item.checked ? 'list__item active' : 'list__item'">
             <input class="hidden" type="checkbox" v-model="item.checked" @change="updateLocalStorage()">
             <input :class="editModeIsOn ? 'list__item-input' : 'list__item-input pointer-events-none'" type="text" v-model="item.name" @blur="updateLocalStorage()" :disabled="!editModeIsOn">
-            <button class="list__item-button" v-if="editModeIsOn" @click="removeItem(index)">
+            <button class="list__item-button" v-if="editModeIsOn" @click="deleteItem(index)">
               <svg width="20"  height="20"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trash"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
             </button>
         </li>
@@ -192,46 +225,17 @@ app.component('view-luggage', {
       <small>¡Añade tu primer item!</small>
     </div>
 
-    <small># {{luggageId}}</small>
+    <small># {{id}}</small>
   `,
   methods: {
-    getIndex: function() {
-      const luggages = JSON.parse(localStorage.getItem('luggages'))
-      let result;
-
-      luggages.forEach((item, index) => {
-        if(item.id == this.luggageId) {
-          result = index
-        }
-      })
-
-      return result;
-    },
-    getTitle: function() {
-      const luggages = JSON.parse(localStorage.getItem('luggages'))
-      let result;
-
-      luggages.forEach((item, index) => {
-        if(item.id == this.luggageId) {
-          result = item.title
-        }
-      })
-
-      return result;
-    },
-    getItems: function() {
-      const luggages = JSON.parse(localStorage.getItem('luggages'))
-      const index = this.getIndex();
-
-      return luggages[index].items
-    },
-    addItem: function() {
+    createItem: function() {
       this.formData.errorMessage = ''
 
       if(this.formData.name.trim() == '') {
         this.formData.errorMessage = 'No deje el campo vacío'
+      }else if(this.formData.name.trim().length > MAX_LENGTH) {
+        this.formData.errorMessage = `Sólo se admiten ${MAX_LENGTH} caracteres como máximo`
       }else {
-        // Everything's good. Add the new item
         this.items.push({
           name: this.formData.name,
           checked: false
@@ -241,14 +245,21 @@ app.component('view-luggage', {
         this.updateLocalStorage()
       }
     },
-    removeItem: function(index) {
+    updateLocalStorage: function() {
+      const allLuggages = JSON.parse(localStorage.getItem('luggages'))
+
+      allLuggages[this.index].items = this.items
+
+      localStorage.setItem('luggages', JSON.stringify(allLuggages))
+    },
+    deleteItem: function(index) {
       this.items.splice(index, 1)
       this.updateLocalStorage()
     },
-    checkItem: function(itemIndex) {
+    checkItem: function(index) {
       if(this.editModeIsOn) return
 
-      this.items[itemIndex].checked = !this.items[itemIndex].checked
+      this.items[index].checked = !this.items[index].checked
       this.updateLocalStorage()
     },
     resetItems: function() {
@@ -258,21 +269,26 @@ app.component('view-luggage', {
 
       this.updateLocalStorage()
     },
-    updateLocalStorage: function() {
-      const luggages = JSON.parse(localStorage.getItem('luggages'))
-      const index = this.getIndex();
-
-      luggages[index].items = this.items
-
-      localStorage.setItem('luggages', JSON.stringify(luggages))
-    },
-    closeView: function() {
+    goBack: function() {
       localStorage.setItem('view', 'home')
 
       location.reload()
     },
     ucFirst: function(value) {
-      return value.split('')[0].toUpperCase() + value.split('').slice(1).join('')
+      // Salvaguardas para que no rompa todo si llega un str vacío o cosas raras
+      if(typeof value !== 'string' || (typeof value === 'string' && value.length <= 0)) return
+      
+      let result = value.split('')
+      result[0] = result[0].toUpperCase()
+      
+      return result.join('')
+    },
+    cutStr: function(value, maxLength) {
+      // Salvaguardas para que no rompa todo si llega un str vacío o cosas raras
+      if(typeof value !== 'string' || (typeof value === 'string' && value.length <= 0)) return
+
+      if(value.length <= maxLength) return value
+      return value.split('').slice(0, maxLength).join('') + '...'
     }
   }
 })
