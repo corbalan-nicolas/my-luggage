@@ -1,9 +1,12 @@
 const MAX_LENGTH = 50 // Variable para definir el máximo de caracteres por item & equipajes (fácilmente salteable editándolos posteriormente)
 const app = Vue.createApp({
   data() {
+    let theme = localStorage.getItem('theme') ?? 'white'
+    document.body.className = theme
     return {
       view: localStorage.getItem('view') ?? 'home', // ej: home || equipaje
-      selectedLuggage: localStorage.getItem('selectedLuggage') ?? ''
+      selectedLuggage: localStorage.getItem('selectedLuggage') ?? '',
+      theme
       //...
     }
   },
@@ -12,6 +15,16 @@ const app = Vue.createApp({
       //...
       this.view = view
       localStorage.setItem('view', view)
+    },
+    switchTheme: function() {
+      if(this.theme === 'white') {
+        this.theme = 'dark'
+      }else if(this.theme === 'dark') {
+        this.theme = 'white'
+      }
+      
+      localStorage.setItem('theme', this.theme)
+      document.body.className = this.theme
     }
   }
 })
@@ -86,9 +99,9 @@ app.component('view-home', {
     </form>
 
     <div class="view-options">
-      <label class="view-options__option">
+      <label class="view-options__option hover-highlight">
         <span class="sr-only">Activar / Desactivar modo edición</span>
-        <input class="view-options__input" type="checkbox" v-model="editModeIsOn">
+        <input class="sr-only" type="checkbox" v-model="editModeIsOn">
         <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
       </label>
     </div>
@@ -199,18 +212,18 @@ app.component('view-luggage', {
     </form>
 
     <div class="view-options">
-      <label class="view-options__option">
+      <label class="view-options__option hover-highlight">
         <span class="sr-only">Compartir equipaje (QR)</span>
-        <input class="view-options__input" type="checkbox" @change="generateQrCode()" v-model="isSharing">
+        <input class="sr-only" type="checkbox" @change="generateQrCode()" v-model="isSharing">
         <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-share"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 12m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 6m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M18 18m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M8.7 10.7l6.6 -3.4" /><path d="M8.7 13.3l6.6 3.4" /></svg>
       </label>
       <button class="view-options__option" @click="resetItems()">
         <span class="sr-only">Resetear items</span>
         <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-restore"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.06 13a9 9 0 1 0 .49 -4.087" /><path d="M3 4.001v5h5" /><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
       </button>  
-      <label class="view-options__option">
+      <label class="view-options__option hover-highlight">
         <span class="sr-only">Activar / Desactivar modo edición</span>
-        <input class="view-options__input" type="checkbox" v-model="editModeIsOn">
+        <input class="sr-only" type="checkbox" v-model="editModeIsOn">
         <svg width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-pencil"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
       </label>
     </div>
