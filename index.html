@@ -2,62 +2,67 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>QR</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vue</title>
 
-  <!-- Icons -->
-  <link rel="icon" type="image/png" sizes="32x32" href="img/icons/favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="96x96" href="img/icons/favicon-96x96.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="img/icons/favicon-16x16.png">
-
-  <!-- Styles -->
+  <!-- STYLES -->
   <link rel="stylesheet" href="css/styles.css">
 
-  <!-- Scripts -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.4/html5-qrcode.min.js" integrity="sha512-k/KAe4Yff9EUdYI5/IAHlwUswqeipP+Cp5qnrsUjTPCgl51La2/JhyyjNciztD7mWNKLSXci48m7cctATKfLlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script defer src="js/vue.js"></script>
+  <!-- VUE -->
+  <script defer src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script defer src="https://unpkg.com/vue-router@4.0.15/dist/vue-router.global.js"></script>
+
+  <!-- COMPONENTS -->
+  <script defer src="components/icon.js"></script>
+  <script defer src="components/form.js"></script>
+
+  <!-- VIEWS -->
+  <script defer src="views/home.js"></script>
+  <script defer src="views/luggage.js"></script>
+  <script defer src="views/qr-scanner.js"></script>
+  <script defer src="views/settings.js"></script>
+
+  <!-- ROUTES -->
+  <script defer src="js/routes.js"></script>
+
+  <!-- MAIN APP -->
   <script defer src="js/app.js"></script>
+  
 </head>
 <body>
-  <div id="app" v-cloak>
-    <main>
-      <section v-if="view == 'home'">
-        <h1>Mis equipajes</h1>
-        <view-home></view-home>
-      </section>
+  
+  <div id="app" class="main-container">
+    <div class="app-container">
 
-      <section v-else-if="view == 'qr-scanner'">
-        <h1>Escanear QR</h1>
-        <qr-scanner></qr-scanner>
-      </section>
-      
-      <section class="view-luggage" v-else-if="view == 'luggage'">
-        <view-luggage :luggage-id="selectedLuggage"></view-luggage>
-      </section>
+      <div class="app-area">
+        <router-view></router-view>
+      </div>
+  
+      <footer class="button-panel">
+        <ul class="buttons-list">
+          <li class="buttons-list__item">
+            <router-link to="/qr-scanner">
+              <Icon name="scan" size="32" stroke-width="1.6"></Icon>
+              <span class="sr-only">Importar nuevo equipaje</span>
+            </router-link>
+          </li>
+          <li class="buttons-list__item">
+            <router-link to="/">
+              <Icon name="home" size="32" stroke-width="1.6"></Icon>
+              <span class="sr-only">Inicio</span>
+            </router-link>
+          </li>
+          <li class="buttons-list__item">
+            <router-link to="/settings">
+              <Icon name="settings" size="32" stroke-width="1.6"></Icon>
+              <span class="sr-only">Configuración</span>
+            </router-link>
+          </li>
+        </ul>
+      </footer>
 
-      <section v-else>
-        <h1>Error 404</h1>
-        <p>Página no encontrada</p>
-        <small>Si el error persiste tiene todo el derecho a aplicarme la guadaña 😔</small>
-        <button @click="setView('home')">Volver al inicio</button>
-        <!-- Hasta ahora no me ha pasado de acceder a esta sección, asi que me pondría muy triste si te pasara a vos profe... -->
-      </section>
-    </main>
-
-    <footer>
-      <button @click="setView('qr-scanner');">
-        <span class="sr-only">Importar nuevo equipaje via QR</span>
-        <svg  xmlns="http://www.w3.org/2000/svg"  width="32"  height="32"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-scan"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7v-1a2 2 0 0 1 2 -2h2" /><path d="M4 17v1a2 2 0 0 0 2 2h2" /><path d="M16 4h2a2 2 0 0 1 2 2v1" /><path d="M16 20h2a2 2 0 0 0 2 -2v-1" /><path d="M5 12l14 0" /></svg>
-      </button>
-      <button @click="setView('home')">
-        <span class="sr-only">Ir al inicio</span>
-        <svg width="32"  height="32"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-home"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
-      </button>
-      <button @click="switchTheme()">
-        <span class="sr-only">Cambiar paleta de colores de la aplicación</span>
-        <svg  xmlns="http://www.w3.org/2000/svg"  width="32"  height="32"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="1.5"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-palette"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 21a9 9 0 0 1 0 -18c4.97 0 9 3.582 9 8c0 1.06 -.474 2.078 -1.318 2.828c-.844 .75 -1.989 1.172 -3.182 1.172h-2.5a2 2 0 0 0 -1 3.75a1.3 1.3 0 0 1 -1 2.25" /><path d="M8.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12.5 7.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M16.5 10.5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>
-      </button>
-    </footer>
+    </div>
   </div>
+
 </body>
 </html>
