@@ -4,7 +4,9 @@
 const app = Vue.createApp({
   data() {
     return {
-      
+      settings: {
+        theme: 'white'
+      }
     }
   }
 })

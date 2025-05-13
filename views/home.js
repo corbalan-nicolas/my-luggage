@@ -8,43 +8,65 @@ const viewHome = {
     }
   },
   template: `
-    <h1>Lista de equipajes</h1>
-    <Form @form-submit="createLuggage" placeholder="Añadir equipaje"></Form>
+    <div class="view-list">
+      <h1>Lista de equipajes</h1>
+      <Form @form-submit="createLuggage" placeholder="Añadir equipaje"></Form>
 
-    <ul>
-      <li>
-        <label>
-          <Icon name="pencil"></Icon>
-          <input class="sr-only" type="checkbox" v-model="isEditing">
-        </label>
-      </li>
-    </ul>
+      <ul class="view-actions">
+        <li>
+          <label>
+            <Icon name="pencil"></Icon>
+            <input class="sr-only" type="checkbox" v-model="isEditing">
+          </label>
+        </li>
+      </ul>
 
-    <ul>
-      <li v-for="item of luggages" @click="viewLuggage(item.id)">
-        <input :class="isEditing? '': 'pointer-events-none'" type="text" v-model="item.title" :disabled="!isEditing">
-        <button v-show="isEditing">
-          <Icon name="trash"></Icon>
-        </button>
-      </li>
-    </ul>
+      <div v-if="luggages.length <= 0">
+        <img src="img/person-looking-at-papers.webp" alt="Persona mirando a unos papeles vacíos">
+        <p>No tenés ningún equipaje para mostrar</p>
+      </div>
+
+      <div v-else>
+        <ul class="list">
+          <li class="list__item list__item--dot" v-for="(item, index) of luggages" @click="viewLuggage(item.id)">
+            <input :class="isEditing? 'list__padding': 'list__padding pointer-events-none'" type="text" v-model="item.title" @input="updateLocalStorage()" :disabled="!isEditing">
+            <div v-show="isEditing">
+              <button @click="deleteLuggage(index)">
+                <Icon touch-area="false" name="trash"></Icon>
+                <span class="sr-only">Eliminar equipaje</span>
+              </button>
+              <!--<button>
+                <Icon touch-area="false" name="menu"></Icon>
+                <span class="sr-only">Mover de posición</span>
+              </button>-->
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
   `,
   methods: {
     createLuggage: function(title) {
       this.luggages.push({
-        id: Date.now(),
+        id: Date.now().toString(36) + Math.random().toString(36),
         title,
         items: []
       })
-    },
-    updateLocalStorage: function() {
-      localStorage.setItem('luggages', JSON.stringify(this.luggages))
+
+      this.updateLocalStorage()
     },
     viewLuggage: function(selectedLuggage) {
       if(this.isEditing) return
 
       localStorage.setItem('selectedLuggage', selectedLuggage)
       this.$router.push('/luggage')
+    },
+    updateLocalStorage: function() {
+      localStorage.setItem('luggages', JSON.stringify(this.luggages))
+    },
+    deleteLuggage: function(index) {
+      this.luggages.splice(index, 1)
+      this.updateLocalStorage()
     }
   },
   created: function() {
