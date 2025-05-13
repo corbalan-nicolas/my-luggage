@@ -12,5 +12,10 @@ const viewQrScanner = {
       accept="image/*"
       capture="environment"
     />
+
+    <h2>Esta sección está en proceso :)</h2>
   `
 }
+
+
+// https://github.com/nimiq/qr-scanner

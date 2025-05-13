@@ -4,7 +4,24 @@ const viewHome = {
   data() {
     return {
       isEditing: false,
-      luggages: []
+      luggages: [],
+
+      test: [
+        {
+          title: 'Idiomas',
+          selected: 2,
+          options: [
+            {
+              id: 1,
+              name: 'Español'
+            },
+            {
+              id: 2,
+              name: 'English'
+            }
+          ]
+        }
+      ]
     }
   },
   template: `
@@ -43,6 +60,12 @@ const viewHome = {
           </li>
         </ul>
       </div>
+
+      <ModalSelect
+        :title="test[0].title"
+        :selected="test[0].selected"
+        :options="test[0].options"
+      ></ModalSelect>
     </div>
   `,
   methods: {
@@ -89,5 +112,27 @@ const viewHome = {
 
     this.luggages = luggages
     this.updateLocalStorage()
+  },
+  mounted: function() {
+    // console.log('mounted')
+    // const settings = [
+    //     {
+    //       title: 'Idiomas',
+    //       selected: 2,
+    //       options: [
+    //         {
+    //           id: 1,
+    //           name: 'Español'
+    //         },
+    //         {
+    //           id: 2,
+    //           name: 'English'
+    //         }
+    //       ]
+    //     }
+    //   ]
+    // const modal = document.createElement('ModalSelect')
+    // console.log(modal)
+    // document.body.append(modal)
   }
 }

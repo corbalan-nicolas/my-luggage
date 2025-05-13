@@ -1,3 +1,5 @@
+'use strict'
+
 const componentForm = ({
   data() {
     return {

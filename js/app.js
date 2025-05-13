@@ -17,6 +17,8 @@ app.use(router)
 // COMPONENTS
 app.component('Icon', componentIcon)
 app.component('Form', componentForm)
+app.component('LuggageQr', componentLuggageQr)
+app.component('ModalSelect', componentModalSelect)
 
 // VIEWS
 app.component('Home', viewHome)

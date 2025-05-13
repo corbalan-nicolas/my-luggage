@@ -53,7 +53,7 @@ const viewLuggage = {
       </div>
 
       <div v-else-if="isSharing">
-        <p>Compartir equipaje :)</p>
+        <LuggageQr :qr-data="generateQrCodeData()"></LuggageQr>
       </div>
 
       <div v-else>
@@ -110,6 +110,14 @@ const viewLuggage = {
     deleteItem: function(index) {
       this.items.splice(index, 1)
       this.updateLocalStorage()
+    },
+    generateQrCodeData: function() {
+      const data = {
+        title: this.title,
+        items: this.items.map(item => item.name, [])
+      }
+      
+      return JSON.stringify(data)
     },
     goBack: function() {
       this.$router.back()
