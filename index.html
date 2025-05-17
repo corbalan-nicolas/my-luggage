@@ -7,7 +7,13 @@
 
   <!-- STYLES -->
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/debug.css">
   
+  <!-- QRCODE API -->
+  <script defer src="apis/qr-scanner.umd.min.js"></script>
+
+  <!-- DICTIONARY -->
+  <script defer src="dictionary.js"></script>
 
   <!-- VUE -->
   <script defer src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -18,6 +24,7 @@
   <script defer src="components/form.js"></script>
   <script defer src="components/luggage-qr.js"></script>
   <script defer src="components/modal-select.js"></script>
+  <script defer src="components/debug.js"></script>
 
   <!-- VIEWS -->
   <script defer src="views/home.js"></script>
@@ -32,7 +39,7 @@
   <script defer src="js/app.js"></script>
   
 </head>
-<body>
+<body class="">
   
   <div id="app" class="main-container">
     <div class="app-container">
@@ -64,8 +71,9 @@
         </ul>
       </footer>
 
+      <Debug></Debug>
+
     </div>
   </div>
-
 </body>
 </html>

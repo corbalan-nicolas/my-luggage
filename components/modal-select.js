@@ -10,9 +10,9 @@ const componentModalSelect = {
           <p class="modal-select__title">{{title}}</p>
 
           <form @change="closeModal(true)">
-            <ul>
+            <ul class="list">
               <li v-for="item of options">
-                <label>
+                <label class="list__item list__padding--y">
                   <span>{{item.name}}</span>
                   <input type="radio" name="option" :value="item.id" :checked="selected == item.id? 'true': ''">
                 </label>
@@ -30,12 +30,17 @@ const componentModalSelect = {
       const $modal = document.querySelector('#modalSelectContainer')
       
       $modal.classList.add('modal-select--close')
+      // console.log('function')
       $modal.addEventListener('animationend', event => {
-        if(event.animationName == 'scale-out') {
+        // console.log('Event animationend')
+        if(event.animationName == 'fade-out') {
+          // console.log('Remove')
           $modal.remove()
-          this.$emit('response', emitValue)
+          // this.$emit('response', emitValue)
         }
       })
     }
   }
 }
+
+// https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Global_attributes/inert

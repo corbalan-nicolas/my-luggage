@@ -236,6 +236,7 @@ h1 {
   box-shadow: var(--app-shadow);
 
   border-radius: 2px;
+  overflow: hidden;
   background-color: var(--bg-app-primary);
   animation: scale-in 300ms ease both;
 }
@@ -246,9 +247,16 @@ h1 {
 
 .modal-select__footer {
   display: block;
+  cursor: pointer;
   width: 100%;
   padding: .5rem 0;
   background-color: var(--bg-app-secondary);
+}
+
+.modal-select__title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-block: .5rem .25rem;
 }
 
 .modal-select--close {
@@ -332,6 +340,10 @@ h1 {
 
 .list__padding {
   padding: .5rem 1rem;
+}
+
+.list__padding--y {
+  padding-block: .25rem;
 }
 /*** LIST |> END ***/
 
@@ -421,6 +433,64 @@ h1 {
   }
 }
 /*** QR GENERATOR |> END ***/
+
+
+
+
+
+/*** QR SCANNER |> START ***/
+.camera-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  z-index: 5;
+
+  display: none;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+
+  width: 100dvw;
+  height: 100dvh;
+
+  background-color: rgba(25 25 25 / 1);
+}
+
+.camera-container.active {
+  display: grid;
+}
+
+.camera {
+  position: relative;
+  outline: 1px solid blue;
+
+  display: grid;
+  place-content: center;
+}
+.camera__video {
+  display: block;
+  max-width: 100dvw;
+  max-height: 100dvh;
+}
+
+.camera__list {
+  position: fixed;
+  left: 2rem;
+  top: 2rem;
+
+  display: flex;
+  justify-content: center;
+  
+  outline: 1px solid lime;
+}
+
+.camera__close {
+  position: fixed;
+  right: 2rem;
+  top: 2rem;
+  color: white;
+}
+/*** QR SCANNER |> END ***/
 
 .view-list {
   height: 100%;

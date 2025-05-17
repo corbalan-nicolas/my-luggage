@@ -4,29 +4,12 @@ const viewHome = {
   data() {
     return {
       isEditing: false,
-      luggages: [],
-
-      test: [
-        {
-          title: 'Idiomas',
-          selected: 2,
-          options: [
-            {
-              id: 1,
-              name: 'Español'
-            },
-            {
-              id: 2,
-              name: 'English'
-            }
-          ]
-        }
-      ]
+      luggages: []
     }
   },
   template: `
     <div class="view-list">
-      <h1>Lista de equipajes</h1>
+      <h1>Mis equipajes</h1>
       <Form @form-submit="createLuggage" placeholder="Añadir equipaje"></Form>
 
       <ul class="view-actions">
@@ -60,12 +43,6 @@ const viewHome = {
           </li>
         </ul>
       </div>
-
-      <ModalSelect
-        :title="test[0].title"
-        :selected="test[0].selected"
-        :options="test[0].options"
-      ></ModalSelect>
     </div>
   `,
   methods: {

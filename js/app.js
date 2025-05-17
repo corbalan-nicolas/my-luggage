@@ -19,6 +19,7 @@ app.component('Icon', componentIcon)
 app.component('Form', componentForm)
 app.component('LuggageQr', componentLuggageQr)
 app.component('ModalSelect', componentModalSelect)
+app.component('Debug', componentDebug)
 
 // VIEWS
 app.component('Home', viewHome)

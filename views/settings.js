@@ -30,18 +30,26 @@ const viewSettings = {
       </button>
     </header>
 
+    <div id="modalSelectContainer"></div>
+
     <ul>
-      <li v-for="setting of settings" @click="">
+      <li v-for="(setting, index) of settings" @click="openModal(index)">
         <h2>{{setting.title}}</h2>
         <p>{{findSelected(setting.options, setting.selected)}}</p>
       </li>
     </ul>
+
+    <ModalSelect
+      :title="settings[0].title"
+      :selected="settings[0].selected"
+      :options="settings[0].options"
+    ></ModalSelect>
   `,
   methods: {
     goBack: function() {
       this.$router.back()
     },
-    findSelected(options, id) {
+    findSelected: function(options, id) {
       let result = ''
       
       options.forEach(item => {
@@ -52,6 +60,13 @@ const viewSettings = {
       })
 
       return result
+    },
+    openModal: function(index) {
+      const $modalContainer = document.querySelector('#modalSelectContainer')
+      
+      $modalContainer.innerHTML = `
+        
+      `
     }
   }
 }
